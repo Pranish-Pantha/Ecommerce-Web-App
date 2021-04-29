@@ -8,13 +8,13 @@ A Multi-Vendor E-commerce web app with the following
 ![](static/img/HowItWorks.png)
 
 ## Home Page
-![](map.png)
+![](static/img/map.png)
 
 ## Order Summary
-![](order-summary.png)
+![](static/img/order-summary.png)
 
 ## Profile Page
-![](profile.png)
+![](static/img/profile.png)
 
 ## Payment Page
-![](stripe-payment.png)
+![](static/img/stripe-payment.png)
