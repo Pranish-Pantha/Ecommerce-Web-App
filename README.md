@@ -4,8 +4,10 @@ A Multi-Vendor E-commerce web app with the following
 - Stripe Payment System
 - HERE Maps API Integration
 - Admin pages for each vendor
+## How It Works
+![](static/img/HowItWorks.png)
 
-## Our Website: Home - Landing Page
+## Home Page
 ![](map.png)
 
 ## Order Summary
