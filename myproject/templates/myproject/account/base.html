@@ -1,0 +1,26 @@
+{% extends "ecom_portal/base.html" %}
+{% load static %}
+{% block allauth_head %}  
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+ {% endblock allauth_head%}   
+ {% block allauth_body %}
+    {% block body %}
+
+    {% if messages %}
+<!--    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div> -->
+    {% endif %}
+
+    
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+{% endblock allauth_body %}

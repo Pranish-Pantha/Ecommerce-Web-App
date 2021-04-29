@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+        
+<div class="container" style="text-align:right;padding-right:30%;background-color:#16AED3;">
+<br>
+<h1>Contact Us</h1>
+
+<form class="login" method="POST" action="{% url 'ecom_portal:support' %}" enctype="multipart/form-data">
+  {% csrf_token %}
+
+<p><label for="id_first_name" class="active">First Name:</label> <input type="text" name="first_name" placeholder="First Name" maxlength="150" required id="id_first_name"></p>	
+<p><label for="id_last_name" class="active">Last Name:</label> <input type="text" name="last_name" placeholder="Last Name" maxlength="150" required id="id_last_name"></p> 
+ <p><label for="id_email" class="active">Email:</label> <input type="text" name="email" placeholder="Email" maxlength="150" required id="id_email"></p>
+<p><label for="id_order_id" class="active">Order ID (optional):</label> <input type="text" name="order_id" placeholder="Order ID" maxlength="150" id="id_order_id"></p>
+<p><label for="id_location" class="active">Location (optional):</label> <input type="text" name="location" placeholder="Location" maxlength="150" id="id_location"></p>
+<p><label for="id_message" class="active">Message:</label> 
+<textarea name="message" required id="id_message" rows="5" cols="33">
+</textarea>
+</p>
+<br>
+  <button class="btn btn-primary waves-effect waves-light" type="submit">Send</button>
+
+</form>
+</div>
+
+{% endblock content %}
+

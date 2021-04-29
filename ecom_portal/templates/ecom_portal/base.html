@@ -1,0 +1,437 @@
+{% load static %}
+{% load cart_template_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" href="data:,">
+    <title>IITS Ecommerce</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+    
+<link rel="preconnect" href="https://fonts.gstatic.com">
+
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+  rel="stylesheet"
+/>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
+      <script src="https://js.stripe.com/v3/"></script>
+
+    <style type="text/css">
+        html{
+font-family: 'Raleway', sans-serif;
+},
+	h1{
+	color: #307470;
+	},
+        body {
+position: relative;
+  min-height: 100%;
+  min-height: 100vh;	
+	},
+        header,
+        .carousel {
+            height: 60vh;
+        }
+
+        @media (max-width: 740px) {
+
+            html,
+            body,
+            header,
+            .carousel {
+                height: 100vh;
+            }
+        }
+
+        @media (min-width: 800px) and (max-width: 850px) {
+
+            html,
+            body,
+            header,
+            .carousel {
+                height: 100vh;
+            }
+        }
+    </style>
+
+    {% block allauth_head %}
+        {% endblock allauth_head %} 
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light default-color scrolling-navbar justify-content-center" style="min-height:73px;color:white;">
+        <div class="container">
+
+            <!-- Brand -->
+
+            <!-- Collapse -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+
+                <!-- Left -->
+		<!--
+                <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                        <script>
+                        function filter(value, vendors){
+                            var filtered = []
+                            for(var i = 0; i < vendors.length; i++){
+                                console.log(vendors[i]['category'])
+                                if(vendors[i]['category'] == value){
+                                    filtered.push(vendors[i])
+                                }
+                            }
+                          //  update(filtered)
+                        }
+                        </script>
+                        <a class="nav-link waves-effect" onclick='filter("C", {{vendors}})'>clothing
+                            </li>
+                </ul> -->
+		<ul class="navbar-nav mr-auto">
+		<li class="nav-item navbar-left">
+			<img src="{% static 'img/Dynamic/logo.png' %}">
+                        </li>
+		</ul>
+                <!-- Right -->
+                <ul class="navbar-nav navbar-right justify-content-end">
+                       <li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'ecom_portal:home' %}">
+                        <span class="clearfix d-none d-sm-inline-block"> Home </span>
+                         </a>
+			<li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'ecom_portal:about' %}">
+                        <span class="clearfix d-none d-sm-inline-block"> About </span>
+                         </a>
+                        </li>
+			<li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'ecom_portal:support' %}">
+                        <span class="clearfix d-none d-sm-inline-block"> Support </span>
+                         </a>
+                        </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'ecom_portal:profile' %}">
+                            <span class="clearfix d-none d-sm-inline-block"> Profile </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'account_logout' %}">
+                            <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+                        </a>
+                    </li>
+			<li class="nav-item">
+                        <a class="nav-link waves-effect" href="{% url 'ecom_portal:order-summary' %}">
+                            <span class="badge red z-depth-1 mr-1"> {{request.user | cart_item_count}} </span> <!--| cart_item_count-->
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+                        </a>
+                    </li>
+                    {% else %}
+			</script>
+
+                    <li class="nav-item">
+                        <a class="navbar-brand waves-effect" href="{% url 'account_login' %}">
+                            <span class="clearfix d-none d-sm-inline-block">
+					   				    Login </span>
+                        </a>
+                    </li>
+		<li class="nav-item">
+                        <a class="nav-link waves-effect" href="{% url 'ecom_portal:order-summary' %}">
+				<span class="badge red z-depth-1 mr-1" id='cart-img' > 0 </span>
+				<i class="fas fa-shopping-cart" ></i>
+                            <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+                        </a>
+                    </li>
+			<script>
+			function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+var num = parseInt( getCookie('items').split('\\054').length / 2)
+var x = document.getElementById('cart-img')
+x.textContent = num
+			</script>
+                    {% endif %}
+                </ul>
+
+            </div> 
+
+        </div>
+    </nav>
+    <!-- Navbar -->
+	{% if support_page  %}
+	<div class="mt-5 pt-4" style="background-color:#16AED3;">
+	{% else %}
+    <div class="mt-5 pt-4">
+	{% endif %}
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissbile fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% block Map %}
+        {% endblock Map %}
+        {% block allauth_body %}
+        {% endblock allauth_body %} 
+        {% block content %}
+        {% endblock content %}
+        
+    </div>
+{% if support_page %}
+
+{% else %}
+<br style="margin:30px;"></br>
+    <!--Footer-->
+{% endif %}
+<style>
+    @media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .footer_main {
+    padding: 0px 0px 50px 0px;
+  }
+}
+
+.footer-right p,
+.footer_middle p {
+  font-family: montserrat;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+ul.footer_list {
+  list-style: none;
+  padding-left: 0px;
+}
+ul.footer_list li {
+  color: rgba(0, 0, 0, 0.5);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+ul.footer_list li.phone {
+  font-size: 22px;
+    color: rgba(0, 0, 0, 1);
+}
+
+ul.footer_list li a {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
+  text-transform: none;
+}
+ul.footer_list a:hover {
+  color: rgba(54, 204, 142, 1);
+  text-decoration: none;
+  list-style: none;
+}
+
+.footer_middle h4, .footer-right h4 {
+  font-family: montserrat;
+  font-size: 24px;
+}
+
+
+.footer_middle {
+  text-align: center;
+  padding: 0;
+}
+
+.footer-right h4, .footer-left h4 {
+  font-family: montserrat;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+#hero-cta-email {
+  height: 50px;
+  width: 60%;
+}
+
+.hero-cta__form input {
+  width: 100%;
+  float: left;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding-left: 15px;
+  font-size: 16px;
+  line-height: 18px;
+  height: 18px;
+  font-family: raleway;
+  font-weight: 400;
+  opacity: 1;
+  display: block;
+  margin-top: 10px;
+}
+
+.hero-cta__form input:focus {
+  outline: none;
+}
+
+.emailsignup {
+  font-family: montserrat;
+  font-size: 16px;
+  margin-left: 15px;
+  height: 50px;
+  width: 30%;
+  border: none;
+  background-color: #36cc8e;
+  color: #fff;
+  text-transform: uppercase;
+  border-radius: 50px;
+  margin-top: 10px;
+}
+
+.trustlogos {
+  margin: 10px auto;
+  max-width: 100%;
+}
+
+.footer_trust_top {
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.footer_trust_top p {
+  font-family: montserrat;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgb(0, 0, 0, 0.5);
+}
+
+  .footer-left {
+    padding-left: 0px;
+    justify-content: flex-start;
+  }
+  .footer-right {
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+.footer_main {
+  margin: 20px 0px 20px 0px;
+}
+
+
+.footer_copyright p {
+  font-size: 12px;
+  color: rgb(0,0,0,0.5);
+padding-top: 20px;
+}
+
+.footer__partners img {
+  float: right;
+  margin: 10px auto;
+  max-width: 100%;
+}
+
+
+    </style>
+    <footer style="width:100%; position:relative; bottom:0; background-color:#41BE61;" class="page-footer text-center font-small mt-4 wow fixed bottom">
+
+
+        <hr class="my-4" style="backgound-color:black;">
+
+        <!-- Social icons -->
+        <div class="pb-4">
+          <a href="https://www.facebook.com/" target="_blank">
+            <i class="fab fa-facebook-f mr-3"></i>
+        </a>
+
+        <a href="https://twitter.com/" target="_blank">
+            <i class="fab fa-twitter mr-3"></i>
+        </a>
+
+        <a href="https://www.youtube.com/" target="_blank">
+            <i class="fab fa-youtube mr-3"></i>
+        </a>
+
+        <a href="https://plus.google.com/" target="_blank">
+            <i class="fab fa-google-plus-g mr-3"></i>
+        </a>
+
+        <a href="https://pinterest.com/" target="_blank">
+            <i class="fab fa-pinterest mr-3"></i>
+        </a>
+
+        <a href="https://github.com/" target="_blank">
+            <i class="fab fa-github mr-3"></i>
+        </a>
+
+        </div>
+
+    </footer>
+ <div style = "position:relative;bottom:0;margin: auto; width: 100%; padding: 10px;text-align: center!important;background-color:#41BE61" >
+    PARTNERS
+    <div class="trustlogos"></div>
+<div class="container-fluid">
+    <div class="row">
+</div>
+</div>    
+</div>
+    <!--/.Footer-->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+    <!-- Initializations -->
+    <script type="text/javascript">
+        // Animations initialization
+        new WOW().init();
+
+    </script>
+</body>
+
+</html>

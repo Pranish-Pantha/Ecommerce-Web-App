@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% load static %}
+{% block Map %}
+{% if Map  %}
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/template.css' %}"" />
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+<body id="markers-on-the-map">
+    <div class="container-fluid">
+    <div class="row">
+    <div class="col-lg-9" style="padding-right:0px;">
+    <div id="map"></div>
+    </div>
+    <div class="col-lg-3" style="background-color:#D9F0D8;">
+<br>
+<br>
+            <form action= "{% url 'ecom_portal:home' %}" method="post">
+{% csrf_token %}
+<ol>
+<li>
+<span style="color:#3d73d0;">Enter your zip code to find nearby stores
+</span>
+</li>
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-default">Enter Zip Code</span>
+  </div>
+  <input type="text" pattern="\d*" name="zip-code" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+</div>
+<li>
+<span style="color:#3d73d0;">Search all stores or filter by category 
+</span>
+</li>
+<div class=container style='text-align:left;padding-left:1rem;'>
+{% for category in categories %}
+<div class="form-check">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="flexRadioDefault"
+    id="flexRadioDefault1"
+    value="{{category.0}}"
+  />
+  <label class="form-check-label" for="flexRadioDefault1"> {{category.1}} </label>
+</div>
+{% endfor  %}
+<!-- Default checked radio -->
+<div class="form-check">
+  <input
+    class="form-check-input"
+    type="radio"
+    name="flexRadioDefault"
+    id="flexRadioDefault2"
+    value="All"
+    checked
+  />
+  <label class="form-check-label" for="flexRadioDefault2"> All </label>
+</div>
+</div>
+<li>
+<span style="color:#3d73d0;">Click Search to display stores on the map
+</span>
+</li>
+</ol>
+<input class="btn btn-primary" type="submit" value="Search">
+</form>
+        </div>
+
+    </div>
+<br>
+<div class="row">
+    <div class="col-md-auto">
+<img src="{% static 'img/HowItWorks.png' %}">
+</div>
+
+</div>
+        </div>
+<script type="text/javascript" onload="start({{vendors}})"  src="{% static 'js/map.js' %}"></script>    
+  </body>
+{% endif  %}
+{% endblock Map %}
+
+{% block content %}
+{% if no_search  %}
+{% else  %}
+{% endif %}
+<!--Main layout-->
+<main>
+  <div class="container">
+    <!--/.Navbar-->
+
+    <!--Section: Products v.3-->
+	{% if VendorPage  %}
+<br>
+<a href="{% url 'ecom_portal:home'%}" class="btn btn-primary btn-md my-0 p">Return to home
+          </a>
+<br>
+<br>
+    <section class="text-center mb-3">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+        {% for item in object_list %}
+
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card image-->
+            <div class="view overlay">
+              
+                <img src="{{item.image.url}}" height="250" width="250" class="card-img-top">
+                
+              <a href="{{item.get_absolute_url}}">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <!--Card image-->
+
+            <!--Card content-->
+            <div class="card-body text-center">
+              <!--Category & Title-->
+              <a href="" class="grey-text">
+                <!--<h5>{{item.get_category_display}}</h5>-->
+              </a>
+              <h5>
+                <strong>
+                  <a href="{{item.get_absolute_url}}" class="dark-grey-text">{{item.title}}
+                    <span class="badge badge-pill primary-color">{{item.get_category_display}}</span>
+                  </a>
+                </strong>
+              </h5>
+		<strong>
+		 <a href="{{item.get_add_to_cart_url}}" class="btn btn-primary btn-md my-0 p">Add to cart
+
+            <i class="fas fa-shopping-cart ml-1"></i>
+          </a>
+		</strong>
+              <h4 class="font-weight-bold blue-text">
+                <strong>$
+                  {{item.price}}
+                </strong>
+              </h4>
+
+            </div>
+            <!--Card content-->
+
+          </div>
+          <!--Card-->
+
+        </div>
+        <!--Grid column-->
+        {% endfor %}
+
+
+      </div>
+      <!--Grid row-->
+
+
+    </section>
+    <!--Section: Products v.3-->
+
+    <!--Pagination-->
+    {% if is_paginated %}
+    
+    
+    <nav class="d-flex justify-content-center wow fadeIn">
+      <ul class="pagination pg-blue">
+
+        <!--Arrow left-->
+        {% if page_obj.has_previous %}
+        
+        
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.previous_page_number}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+{% endif %}
+        <li class="page-item active">
+          <a class="page-link" href="?page={{page_obj.number}}">{{page_obj.number}}
+            <span class="sr-only">(current)</span>
+          </a>
+        
+{% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{page_obj.next_page_number}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      {% endif %}
+      </ul>
+    </nav>
+    <!--Pagination-->
+{% endif %}
+  </div>
+{% else %}
+</body>
+{% endif %}
+<!--
+<br style="margin:20px"></br>
+-->
+</main>
+<!--Main layout-->
+{% endblock content %}

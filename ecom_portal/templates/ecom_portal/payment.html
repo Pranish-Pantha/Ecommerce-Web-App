@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+<table class="table">
+<thead>
+    <tr>
+      <th scope="col">Vendor</th>
+	{% for vendor, items in order.items %}
+      <th scope="col">{{vendor}}</th>
+     {% endfor %}
+    </tr>
+  </thead>
+ <tbody>
+<thead>
+    <tr>
+      <th scope="col">Location</th>
+	{% for vendor, items in order.items %}
+	<th scope="col">{{items.0}}</th>
+	{% endfor %}   
+ </tr>
+  </thead>
+<thread>
+<tr>
+<th scope="col">Items</th>
+{% for vendor, items in order.items %}
+  <th scope="col">
+
+{% for item in items %}
+{% if item.quantity %}
+ {{item.quantity}} x {{item.item.title}} = ${{item.get_total_item_price}} 
+ <br>
+{% endif %}
+{% endfor %}
+</th>
+{% endfor %}
+  </tr>
+  </thead>
+ </tbody>
+
+</table>
+Order ID: {{order_id}}
+<body data-gr-ext-disabled="forever" class="imt_processed">
+ <button class="btn btn-primary float-right" id="checkout-button" type="submit">Checkout</button>
+ <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+    <script type="text/javascript" onload="run('{{session_id}}')" src="{% static 'js/stripe.js' %}">
+function run(session_id){
+
+var stripe = Stripe(''); // Stripe key
+
+var checkoutButton = document.getElementById('checkout-button');
+
+checkoutButton.addEventListener('click', function() {
+  stripe.redirectToCheckout({
+    // Make the id field from the Checkout Session creation API response
+    // available to this file, so you can provide it as argument here
+    // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+    sessionId: session_id
+  }).then(function (result) {
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, display the localized error message to your customer
+    // using `result.error.message`.
+  });
+});
+}
+    </script>
+{% endblock content %}

@@ -1,0 +1,13 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="email_all/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                 <input type="submit">
+        </form>
+        
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}
